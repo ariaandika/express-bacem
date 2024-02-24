@@ -65,5 +65,86 @@ jika anda ingin melihat satu user, request:
 GET http://localhost:3000/users/1
 ```
 
-anda akan mendapatkan hanya user pertama yang anda buat
+anda akan mendapatkan hanya user pertama yang dibuat
+
+anda dapat merubah angka satu menjadi user id lainya
+
+jika id tidak ditemukan, anda akan mendapatkan respon
+
+```json
+{
+    "error": true,
+    "message": "User tidak ditemukan"
+}
+```
+
+### Query `Products`
+
+request:
+
+```http
+GET http://localhost:3000/products
+```
+
+anda akan mendapatkan `[]`, berarti array kosong, karena kita belum membuat produk
+
+### Create `Product`
+
+request:
+
+```http
+POST http://localhost:3000/products
+{
+    name: "Kasur",
+    brand: "lg",
+    price: 50000,
+    ownerId: 1
+}
+```
+
+anda akan mendapatkan respon: "Created", yang berarti produk berhasil dibuat
+
+gunakan request dari **Query Products** untuk melihat produk yang terbuat
+
+anda dapat menambahkan beberapa data, lalu **Query Products** akan merespon
+dengan semua produk
+
+### Get `Product`
+
+jika anda ingin melihat satu produk, request:
+
+```bash
+GET http://localhost:3000/products/1
+```
+
+anda akan mendapatkan hanya produk pertama yang dibuat
+
+anda dapat merubah angka satu menjadi produk id lainya
+
+jika id tidak ditemukan, anda akan mendapatkan respon
+
+```json
+{
+    "error": true,
+    "message": "Produk tidak ditemukan"
+}
+```
+
+anda dapat menambahkan query paramter `owner`:
+
+```bash
+GET http://localhost:3000/products/1?owner=1
+```
+
+maka anda juga akan mendapat data dari pemilik produk tersebut
+
+### List `User Products`
+
+request:
+
+```bash
+GET http://localhost:3000/users/1/products
+```
+
+anda akan mendapatkan semua produk dari pemilik yang memiliki user id 1
 
