@@ -1,10 +1,11 @@
 import express from 'express'
 import { prisma } from "../lib/prisma.js"
+import { handleError } from '../lib/errorHandling.js'
 
 
 export const products = express.Router()
 
-products.get('/', async (req,res) => {
+products.get('/', (req,res) => handleError(async () => {
 
     const limit = parseInt(req.query.limit?.toString())
     const page = parseInt(req.query.page?.toString())
@@ -23,9 +24,9 @@ products.get('/', async (req,res) => {
     const products = await prisma.products.findMany({ skip, take, })
 
     res.json(products)
-})
+}))
 
-products.get('/:id', async (req,res) => {
+products.get('/:id', (req,res) => handleError(async () => {
     const id = parseInt(req.params.id)
 
     const owner = req.query.owner
@@ -41,19 +42,14 @@ products.get('/:id', async (req,res) => {
     }
 
     res.json(product)
-})
+}))
 
-products.post('/', async (req,res) => {
-    try {
-        await prisma.products.create({
-            data: req.body
-        })
+products.post('/', async (req,res) => handleError(async () => {
+    await prisma.products.create({
+        data: req.body
+    })
 
-        res.sendStatus(201)
-    } catch (err) {
-        console.error(err.message)
-        res.sendStatus(500)
-    }
-})
+    res.sendStatus(201)
+}))
 
 

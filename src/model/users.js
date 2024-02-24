@@ -1,11 +1,11 @@
 import express from 'express'
 import { prisma } from "../lib/prisma.js"
+import { handleError } from "../lib/errorHandling.js"
 
 
 export const users = express.Router()
 
-users.get('/', async (req,res) => {
-
+users.get('/', (req,res) => handleError(async () => {
     const limit = parseInt(req.query.limit?.toString())
     const page = parseInt(req.query.page?.toString())
 
@@ -23,9 +23,9 @@ users.get('/', async (req,res) => {
     const users = await prisma.users.findMany({ skip, take, })
 
     res.json(users)
-})
+}))
 
-users.get('/:id', async (req,res) => {
+users.get('/:id', async (req,res) => handleError(async () => {
     const id = parseInt(req.params.id)
 
     const user = await prisma.users.findFirst({
@@ -38,9 +38,9 @@ users.get('/:id', async (req,res) => {
     }
 
     res.json(user)
-})
+}))
 
-users.get('/:id/products', async (req,res) => {
+users.get('/:id/products', (req,res) => handleError(async () => {
     const id = parseInt(req.params.id)
 
     const products = await prisma.products.findMany({
@@ -48,19 +48,14 @@ users.get('/:id/products', async (req,res) => {
     })
 
     res.json(products)
-})
+}))
 
-users.post('/', async (req,res) => {
-    try {
-        await prisma.users.create({
-            data: req.body
-        })
+users.post('/', (req,res) => handleError(res, async () => {
+    await prisma.users.create({
+        data: req.body
+    })
 
-        res.sendStatus(201)
-    } catch (err) {
-        console.error(err.message)
-        res.sendStatus(500)
-    }
-})
+    res.sendStatus(201)
+}))
 
 
