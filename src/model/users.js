@@ -5,7 +5,7 @@ import { handleError } from "../lib/errorHandling.js"
 
 export const users = express.Router()
 
-users.get('/', (req,res) => handleError(async () => {
+users.get('/', (req,res) => handleError(res, async () => {
     const limit = parseInt(req.query.limit?.toString())
     const page = parseInt(req.query.page?.toString())
 
@@ -25,7 +25,7 @@ users.get('/', (req,res) => handleError(async () => {
     res.json(users)
 }))
 
-users.get('/:id', async (req,res) => handleError(async () => {
+users.get('/:id', async (req,res) => handleError(res, async () => {
     const id = parseInt(req.params.id)
 
     const user = await prisma.users.findFirst({
@@ -40,7 +40,7 @@ users.get('/:id', async (req,res) => handleError(async () => {
     res.json(user)
 }))
 
-users.get('/:id/products', (req,res) => handleError(async () => {
+users.get('/:id/products', (req,res) => handleError(res, async () => {
     const id = parseInt(req.params.id)
 
     const products = await prisma.products.findMany({

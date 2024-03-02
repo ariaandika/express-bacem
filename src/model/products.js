@@ -5,7 +5,7 @@ import { handleError } from '../lib/errorHandling.js'
 
 export const products = express.Router()
 
-products.get('/', (req,res) => handleError(async () => {
+products.get('/', (req,res) => handleError(res, async () => {
 
     const limit = parseInt(req.query.limit?.toString())
     const page = parseInt(req.query.page?.toString())
@@ -26,7 +26,7 @@ products.get('/', (req,res) => handleError(async () => {
     res.json(products)
 }))
 
-products.get('/:id', (req,res) => handleError(async () => {
+products.get('/:id', (req,res) => handleError(res, async () => {
     const id = parseInt(req.params.id)
 
     const owner = req.query.owner
@@ -44,7 +44,7 @@ products.get('/:id', (req,res) => handleError(async () => {
     res.json(product)
 }))
 
-products.post('/', async (req,res) => handleError(async () => {
+products.post('/', async (req,res) => handleError(res, async () => {
     await prisma.products.create({
         data: req.body
     })
