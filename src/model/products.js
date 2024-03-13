@@ -52,4 +52,24 @@ products.post('/', async (req,res) => handleError(res, async () => {
     res.sendStatus(201)
 }))
 
+products.put('/', async (req,res) => handleError(res, async () => {
+    await prisma.products.update({
+        data: req.body
+    })
+
+    res.sendStatus(200)
+}))
+
+products.delete('/:id', async (req,res) => handleError(res, async () => {
+    const id = parseInt(req.params.id)
+
+    if (isNaN(id)) {
+        return res.sendStatus(400)
+    }
+
+    await prisma.products.delete({ where: { id } })
+
+    res.sendStatus(200)
+}))
+
 

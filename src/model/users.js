@@ -58,4 +58,23 @@ users.post('/', (req,res) => handleError(res, async () => {
     res.sendStatus(201)
 }))
 
+users.put('/', async (req,res) => handleError(res, async () => {
+    await prisma.users.update({
+        data: req.body
+    })
+
+    res.sendStatus(200)
+}))
+
+users.delete('/:id', async (req,res) => handleError(res, async () => {
+    const id = parseInt(req.params.id)
+
+    if (isNaN(id)) {
+        return res.sendStatus(400)
+    }
+
+    await prisma.users.delete({ where: { id } })
+
+    res.sendStatus(200)
+}))
 
